@@ -49,11 +49,11 @@ dummies = dummies[,-which(colnames(dummies)=="pred")] # cant use pred column
 train_x = makeX(dummies[,76:191])
 train_y  = dummies$CF..ansbin.
 train_xx=unname(train_x)
-fit  <- glmnet(train_x,train_y,family="binomial",intercept = FALSE)
+fit  <- glmnet(train_x,train_y,family="binomial",intercept = TRUE) #See issue #1 in repo for why I think keeping global makes sense (tldr; lasso will drop it if not useful)
 plot(fit,label=TRUE)
 print(fit)
 coef(fit, s = 0.1)
-cvfit <- cv.glmnet(train_x, train_y,family="binomial",intercept=FALSE)
+cvfit <- cv.glmnet(train_x, train_y,family="binomial",intercept=TRUE)
 plot(cvfit)
 coef(cvfit, s = "lambda.min")
 
