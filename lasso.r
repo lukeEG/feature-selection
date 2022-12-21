@@ -49,13 +49,18 @@ dummies = dummies[,-which(colnames(dummies)=="pred")] # cant use pred column
 train_x = makeX(dummies[,76:191])
 train_y  = dummies$CF..ansbin.
 train_xx=unname(train_x)
-fit  <- glmnet(train_x,train_y,family="binomial")
+fit  <- glmnet(train_x,train_y,family="binomial",intercept = FALSE)
 plot(fit,label=TRUE)
 print(fit)
 coef(fit, s = 0.1)
-cvfit <- cv.glmnet(train_x, train_y,family="binomial")
+cvfit <- cv.glmnet(train_x, train_y,family="binomial",intercept=FALSE)
 plot(cvfit)
 coef(cvfit, s = "lambda.min")
-coef(cvfit, s = "lambda.1se")
 
+cv_features = coef(cvfit, s = "lambda.1se")
+
+rownames(cv_features)[1:9]
+cv_features[1:9]
+
+#Larger lambda (to the right) results in fewer features
 plot(fit, xvar = "lambda", label = TRUE)
